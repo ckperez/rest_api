@@ -3,6 +3,7 @@
 const express = require('express');
 const Snake = require(__dirname + '/../model/snake');
 const bodyParser = require('body-parser').json();
+const jwt = require(__dirname + '/../lib/jwt');
 
 const snakeRouter = module.exports = exports = express.Router();
 
@@ -13,7 +14,7 @@ snakeRouter.get('/', (req, res)=>{
   });
 });
 
-snakeRouter.post('/', bodyParser, (req, res)=>{
+snakeRouter.post('/', bodyParser, jwt, (req, res)=>{
   let aSnake = new Snake({
     name: req.body.name,
     weaselKiller: req.body.weaselKiller,
@@ -25,7 +26,7 @@ snakeRouter.post('/', bodyParser, (req, res)=>{
   });
 });
 
-snakeRouter.put('/', bodyParser, (req, res)=>{
+snakeRouter.put('/', bodyParser, jwt, (req, res)=>{
   let _id = req.body._id;
   Snake.findOneAndUpdate({_id}, req.body, (err, data)=>{
     if (err) return res.json({message: 'Error updating'});
@@ -33,7 +34,7 @@ snakeRouter.put('/', bodyParser, (req, res)=>{
   });
 });
 
-snakeRouter.delete('/:id', (req, res)=>{
+snakeRouter.delete('/:id', jwt, (req, res)=>{
   let _id = req.params.id;
   Snake.findOneAndRemove({_id}, (err, data)=>{
     if (err) return res.json({message: 'Error deleting'});

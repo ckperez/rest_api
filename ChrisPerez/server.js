@@ -2,6 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const snakeRouter = require(__dirname + '/routes/snakeRouter.js');
 const weaselRouter = require(__dirname + '/routes/weaselRouter.js');
 const battleRouter = require(__dirname + '/routes/battleRouter.js');
@@ -9,6 +10,8 @@ const authRouter = require(__dirname + '/routes/auth_routes');
 const app = express();
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/dev_db');
+
+app.use(cors());
 
 app.use('/snakes', snakeRouter);
 app.use('/weasels', weaselRouter);

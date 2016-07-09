@@ -3,6 +3,7 @@
 const express = require('express');
 const Weasel = require(__dirname + '/../model/weasel');
 const bodyParser = require('body-parser').json();
+const jwt = require(__dirname + '/../lib/jwt');
 
 const weaselRouter = module.exports = exports = express.Router();
 
@@ -13,7 +14,7 @@ weaselRouter.get('/', (req, res)=>{
   });
 });
 
-weaselRouter.post('/', bodyParser, (req, res)=>{
+weaselRouter.post('/', bodyParser, jwt, (req, res)=>{
   let aWeasel = new Weasel({
     name: req.body.name,
     snakeKiller: req.body.snakeKiller,
@@ -25,7 +26,7 @@ weaselRouter.post('/', bodyParser, (req, res)=>{
   });
 });
 
-weaselRouter.put('/', bodyParser, (req, res)=>{
+weaselRouter.put('/', bodyParser, jwt, (req, res)=>{
   let _id = req.body._id;
   Weasel.findOneAndUpdate({_id}, req.body, (err, data)=>{
     if (err) return res.json({message: 'Error updating'});
@@ -33,7 +34,7 @@ weaselRouter.put('/', bodyParser, (req, res)=>{
   });
 });
 
-weaselRouter.delete('/:id', (req, res)=>{
+weaselRouter.delete('/:id', jwt, (req, res)=>{
   let _id = req.params.id;
   Weasel.findOneAndRemove({_id}, (err, data)=>{
     if (err) return res.json({message: 'Error deleting'});
